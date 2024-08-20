@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login Page</title>
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld9YygqAAAAAO8CMmH2-XTciOfp0nx95_j2c_h9"></script>
+
+    <style>
+      /* Add some basic styling to the form */
+      form {
+        width: 300px;
+        margin: 40px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <form id="login-form">
+      <div
+        class="g-recaptcha"
+        data-sitekey="6Ld9YygqAAAAAO8CMmH2-XTciOfp0nx95_j2c_h9"
+      ></div>
+      <br />
+      <button type="submit">Copy token to clipboard</button>
+      <br /><br />
+      <span id="copiedResult" style="display: none">Copied to clipboard</span>
+    </form>
+
+    <script type="text/javascript">
+      function copyToClipboard(text) {
+        navigator.clipboard
+          .writeText(text)
+          .then(function () {
+            alert("Token copied to clipboard");
+          })
+          .catch(function (error) {
+            console.error("Failed to copy text: ", error);
+          });
+      }
+      // Add event listener to the form submission
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          grecaptcha.enterprise.ready(async () => {
+            const token = await grecaptcha.enterprise.execute(
+              "6Ld9YygqAAAAAO8CMmH2-XTciOfp0nx95_j2c_h9",
+              { action: "TOO_MANY_LOGIN_ATTEMPTS" }
+            );
+            copyToClipboard(token);
+          });
+        });
+    </script>
+  </body>
+</html>
